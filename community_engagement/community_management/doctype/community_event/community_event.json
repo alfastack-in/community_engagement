@@ -67,16 +67,17 @@
    "options": "Event Attendee"
   },
   {
+   "default": "Created",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Upcoming\nCompleted"
+   "options": "Created\nUpcoming\nCompleted"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-03 09:48:19.178373",
+ "modified": "2025-06-05 16:55:05.398248",
  "modified_by": "Administrator",
  "module": "Community Management",
  "name": "Community Event",

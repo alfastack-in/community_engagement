@@ -1,0 +1,80 @@
+[
+ {
+  "allow": "Module Def",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "Community Management",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-03 13:01:04.499311",
+  "name": "rpl8octfk1",
+  "user": "amanbooradoon@gmail.com"
+ },
+ {
+  "allow": "Employee",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "HR-EMP-00001",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-03 13:05:34.272626",
+  "name": "udu86g7bem",
+  "user": "amanbooradoon@gmail.com"
+ },
+ {
+  "allow": "Company",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "Alphastack",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-03 13:05:34.312377",
+  "name": "udv7m7bsig",
+  "user": "amanbooradoon@gmail.com"
+ },
+ {
+  "allow": "Employee",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "HR-EMP-00002",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-03 23:56:01.619458",
+  "name": "ri04t9a1dp",
+  "user": "head@xyz.com"
+ },
+ {
+  "allow": "Company",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "Alphastack",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-03 23:56:01.644185",
+  "name": "ri007t39gb",
+  "user": "head@xyz.com"
+ },
+ {
+  "allow": "Department",
+  "applicable_for": null,
+  "apply_to_all_doctypes": 1,
+  "docstatus": 0,
+  "doctype": "User Permission",
+  "for_value": "Human Resources - A",
+  "hide_descendants": 0,
+  "is_default": 0,
+  "modified": "2025-06-04 00:00:12.817327",
+  "name": "tnafs23amn",
+  "user": "head@xyz.com"
+ }
+]

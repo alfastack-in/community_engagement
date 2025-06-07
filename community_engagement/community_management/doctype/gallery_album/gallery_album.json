@@ -9,13 +9,16 @@
   "album_name",
   "event",
   "description",
-  "images"
+  "images",
+  "status"
  ],
  "fields": [
   {
    "fieldname": "album_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Album Name",
+   "reqd": 1,
    "unique": 1
   },
   {
@@ -34,12 +37,19 @@
    "fieldtype": "Table",
    "label": "Images",
    "options": "Gallery Image"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nReview\nPublished"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-03 09:54:19.746872",
+ "modified": "2025-06-05 22:01:59.735971",
  "modified_by": "Administrator",
  "module": "Community Management",
  "name": "Gallery Album",
