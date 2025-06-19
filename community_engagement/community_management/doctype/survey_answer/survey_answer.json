@@ -13,8 +13,9 @@
  "fields": [
   {
    "fieldname": "question",
-   "fieldtype": "Data",
-   "label": "Question"
+   "fieldtype": "Link",
+   "label": "Question",
+   "options": "Survey Question"
   },
   {
    "fieldname": "answer",
@@ -32,7 +33,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-03 13:22:57.127880",
+ "modified": "2025-06-10 09:27:21.535173",
  "modified_by": "Administrator",
  "module": "Community Management",
  "name": "Survey Answer",
