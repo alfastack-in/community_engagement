@@ -1,0 +1,66 @@
+<%- include('layout', { body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                    <i class="fas fa-poll text-green-600 mr-3"></i>
+                    Surveys
+                </h1>
+                <p class="mt-2 text-gray-600">Share your feedback and help us improve</p>
+            </div>
+            <div class="bg-green-100 rounded-full p-3">
+                <i class="fas fa-chart-bar text-green-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Surveys Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        ${surveys.length === 0 ? `
+        <div class="col-span-full bg-white rounded-xl shadow-sm p-12 text-center">
+            <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-poll text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No active surveys</h3>
+            <p class="text-gray-500">Check back later for new surveys to participate in.</p>
+        </div>
+        ` : surveys.map(survey => `
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border-t-4 border-green-500">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-circle mr-1 text-xs"></i>
+                        ${survey.status}
+                    </span>
+                    ${survey.anonymous ? `
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        <i class="fas fa-user-secret mr-1"></i>
+                        Anonymous
+                    </span>
+                    ` : ''}
+                </div>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-gray-900 mb-3 break-words truncate">${survey.title}</h3>
+            
+            <p class="text-gray-600 mb-4 leading-relaxed break-words">${survey.description || 'No description available'}</p>
+            
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-500 flex items-center">
+                    <i class="fas fa-calendar mr-1"></i>
+                    Created: ${survey.creation_formatted}
+                </span>
+                
+                <a href="/survey/${survey.name}" 
+                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center">
+                    <i class="fas fa-play mr-2"></i>
+                    Take Survey
+                </a>
+            </div>
+        </div>
+        `).join('')}
+    </div>
+</div>
+` }) %>

@@ -1,0 +1,212 @@
+<%- include('layout', { body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                    <i class="fas fa-calendar-alt text-red-600 mr-3"></i>
+                    Upcoming Events
+                </h1>
+                <p class="mt-2 text-gray-600">Discover and participate in company events</p>
+            </div>
+            <div class="bg-red-100 rounded-full p-3">
+                <i class="fas fa-calendar-check text-red-600 text-xl"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events List -->
+    <div class="space-y-6">
+        ${events.length === 0 ? `
+        <div class="bg-white rounded-xl shadow-sm p-12 text-center">
+            <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No upcoming events</h3>
+            <p class="text-gray-500">Check back later for exciting company events and activities.</p>
+        </div>
+        ` : events.map(event => `
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border-l-4 ${event.status === 'Upcoming' ? 'border-green-500' : event.status === 'Created' ? 'border-blue-500' : 'border-gray-500'}">
+            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+                <div class="flex-1">
+                    <!-- Event Header -->
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${event.status === 'Upcoming' ? 'bg-green-100 text-green-800' : event.status === 'Created' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}">
+                            <i class="fas ${event.status === 'Upcoming' ? 'fa-clock' : event.status === 'Created' ? 'fa-plus-circle' : 'fa-check-circle'} mr-1"></i>
+                            ${event.status}
+                        </span>
+                        ${event.rsvp_required ? `
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                            <i class="fas fa-user-check mr-1"></i>
+                            RSVP Required
+                        </span>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Event Title -->
+                    <h2 class="text-2xl font-bold text-gray-900 mb-3 break-words truncate">${event.title}</h2>
+                    
+                    <!-- Event Description -->
+                    <p class="text-gray-600 mb-4 leading-relaxed break-words">${event.description || 'No description available'}</p>
+                    
+                    <!-- Event Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="flex items-center text-gray-700">
+                            <div class="bg-red-100 rounded-lg p-2 mr-3">
+                                <i class="fas fa-calendar text-red-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Date & Time</p>
+                                <p class="font-semibold">${event.date_time_formatted}</p>
+                            </div>
+                        </div>
+                        
+                        ${event.location ? `
+                        <div class="flex items-center text-gray-700">
+                            <div class="bg-blue-100 rounded-lg p-2 mr-3">
+                                <i class="fas fa-map-marker-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Location</p>
+                                <p class="font-semibold">${event.location}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Event Meta -->
+                    <div class="flex items-center text-sm text-gray-500">
+                        <i class="fas fa-plus-circle mr-1"></i>
+                        <span>Created on ${event.creation_formatted}</span>
+                    </div>
+                </div>
+                
+                <!-- RSVP Section -->
+                ${event.rsvp_required && event.is_upcoming ? `
+                <div class="mt-6 lg:mt-0 lg:ml-6 flex flex-col items-center lg:items-end">
+                    <div class="bg-gradient-to-r from-red-500 to-pink-500 rounded-full p-4 mb-4">
+                        <i class="fas fa-calendar-check text-white text-2xl"></i>
+                    </div>
+                    <button onclick="rsvpEvent('${event.name}')" 
+                            class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        <i class="fas fa-hand-paper mr-2"></i>
+                        RSVP Now
+                    </button>
+                    <p class="text-xs text-gray-500 mt-2 text-center">Click to confirm attendance</p>
+                </div>
+                ` : event.is_upcoming ? `
+                <div class="mt-6 lg:mt-0 lg:ml-6 flex flex-col items-center lg:items-end">
+                    <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-full p-4 mb-4">
+                        <i class="fas fa-calendar-alt text-white text-2xl"></i>
+                    </div>
+                    <div class="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-medium">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        No RSVP Required
+                    </div>
+                </div>
+                ` : `
+                <div class="mt-6 lg:mt-0 lg:ml-6 flex flex-col items-center lg:items-end">
+                    <div class="bg-gray-100 rounded-full p-4 mb-4">
+                        <i class="fas fa-calendar-times text-gray-400 text-2xl"></i>
+                    </div>
+                    <div class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-medium">
+                        <i class="fas fa-clock mr-2"></i>
+                        Event Passed
+                    </div>
+                </div>
+                `}
+            </div>
+            
+            <!-- Event Actions Bar -->
+            <div class="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                    <span class="flex items-center">
+                        <i class="fas fa-eye mr-1"></i>
+                        Event ID: ${event.name}
+                    </span>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <button onclick="shareEvent('${event.name}', '${event.title}')" 
+                            class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button onclick="addToCalendar('${event.title}', '${event.date_and_time}', '${event.location || ''}')" 
+                            class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-calendar-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        `).join('')}
+    </div>
+</div>
+
+<script>
+async function rsvpEvent(eventName) {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    // Show loading state
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>RSVPing...';
+    
+    try {
+        const response = await fetch('/rsvp-event', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ event_name: eventName })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('RSVP successful! You are now registered for this event.', 'success');
+            button.innerHTML = '<i class="fas fa-check mr-2"></i>RSVP Confirmed';
+            button.classList.remove('bg-red-600', 'hover:bg-red-700');
+            button.classList.add('bg-green-600', 'cursor-not-allowed');
+        } else {
+            showToast('Failed to RSVP for event. Please try again.', 'error');
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    } catch (error) {
+        showToast('An error occurred while processing your RSVP.', 'error');
+        button.disabled = false;
+        button.innerHTML = originalText;
+    }
+}
+
+function shareEvent(eventName, eventTitle) {
+    if (navigator.share) {
+        navigator.share({
+            title: eventTitle,
+            text: \`Check out this event: \${eventTitle}\`,
+            url: window.location.href
+        });
+    } else {
+        // Fallback: copy to clipboard
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Event link copied to clipboard!', 'success');
+        });
+    }
+}
+
+function addToCalendar(title, dateTime, location) {
+    const startDate = new Date(dateTime);
+    const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Add 2 hours
+    
+    const formatDate = (date) => {
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+    
+    const calendarUrl = \`https://calendar.google.com/calendar/render?action=TEMPLATE&text=\${encodeURIComponent(title)}&dates=\${formatDate(startDate)}/\${formatDate(endDate)}&location=\${encodeURIComponent(location)}&sf=true&output=xml\`;
+    
+    window.open(calendarUrl, '_blank');
+}
+</script>
+` }) %>

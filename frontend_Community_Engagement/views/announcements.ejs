@@ -1,0 +1,169 @@
+<%- include('layout', { body: `
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <!-- Header Section -->
+        <div class="bg-white dark:bg-dark-800 rounded-3xl shadow-xl p-8 animate-slide-up border border-gray-100 dark:border-dark-700">
+            <div class="flex flex-col lg:flex-row items-center justify-between">
+                <div class="flex-1 mb-6 lg:mb-0">
+                    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-3 mr-4">
+                            <i class="fas fa-bullhorn text-white text-2xl"></i>
+                        </div>
+                        Announcements
+                    </h1>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        Stay updated with the latest company news and important updates
+                    </p>
+                </div>
+                <div class="hidden lg:block">
+                    <div class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-2xl p-6 floating-animation">
+                        <i class="fas fa-bell text-blue-600 dark:text-blue-400 text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Announcements List -->
+        <div class="space-y-6">
+            ${announcements.length === 0 ? `
+            <div class="bg-white dark:bg-dark-800 rounded-3xl shadow-xl p-12 text-center animate-scale-in border border-gray-100 dark:border-dark-700">
+                <div class="bg-gray-100 dark:bg-dark-700 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-inbox text-gray-400 dark:text-gray-500 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">No announcements yet</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-lg">Check back later for company updates and news.</p>
+            </div>
+            ` : announcements.map((announcement, index) => `
+            <div class="bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll" style="animation-delay: ${index * 0.1}s">
+                <div class="flex flex-col lg:flex-row items-start justify-between">
+                    <div class="flex-1 mb-6 lg:mb-0 lg:pr-8">
+                        <!-- Badges -->
+                        <div class="flex flex-wrap items-center gap-3 mb-4">
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${announcement.audience === 'Organisation-wide' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'}">
+                                <i class="fas ${announcement.audience === 'Organisation-wide' ? 'fa-globe' : 'fa-building'} mr-2"></i>
+                                ${announcement.audience}
+                            </span>
+                            ${announcement.department ? `
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 dark:bg-dark-700 text-gray-800 dark:text-gray-300">
+                                <i class="fas fa-users mr-2"></i>
+                                ${announcement.department}
+                            </span>
+                            ` : ''}
+                        </div>
+    
+                        <!-- Title -->
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight break-words truncate">
+                            ${announcement.title}
+                        </h2>
+    
+                        <!-- Content -->
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed text-lg break-words">
+                            ${announcement.content_snippet}
+                        </p>
+    
+                        <!-- Attachment -->
+                        ${announcement.attachment ? `
+                            <div class="mb-4">
+                                ${/\.(jpg|jpeg|png|gif|webp)$/i.test(announcement.attachment) ? `
+                                    <a href="${announcement.attachment}" target="_blank">
+                                        <img src="${announcement.attachment}" alt="Attachment" class="rounded-xl shadow max-h-60 object-contain w-full max-w-xs mx-auto" style="display:block;" />
+                                    </a>
+                                ` : `
+                                    <a href="${announcement.attachment}" target="_blank" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline break-all">
+                                        <i class="fas fa-paperclip mr-2"></i> View Attachment
+                                    </a>
+                                `}
+                            </div>
+                        ` : ''}
+    
+                        <!-- Meta Information -->
+                        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+                            <span class="flex items-center">
+                                <i class="fas fa-calendar mr-2"></i>
+                                Posted: ${announcement.creation_formatted}
+                            </span>
+                            ${announcement.expiry_date_formatted ? `
+                            <span class="flex items-center">
+                                <i class="fas fa-clock mr-2"></i>
+                                Expires: ${announcement.expiry_date_formatted}
+                            </span>
+                            ` : ''}
+                        </div>
+                    </div>
+    
+                    <!-- Action Section -->
+                    <div class="flex flex-col items-center lg:items-end space-y-4">
+                        <a href="/announcement/${announcement.name}" class="btn-secondary text-blue-600 dark:text-blue-400 px-6 py-3 rounded-xl font-semibold shadow hover:shadow-lg hover:bg-blue-50 dark:hover:bg-dark-700 transition-all duration-200 mb-2 flex items-center">
+                            <i class="fas fa-eye mr-2"></i> View
+                        </a>
+                        ${announcement.acknowledgment === 1 ? `
+                        <div class="text-center lg:text-right">
+                            <div class="bg-green-100 dark:bg-green-900/30 rounded-2xl p-6 mb-3">
+                                <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-3xl"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-green-600 dark:text-green-400">
+                                ✅ Acknowledged
+                            </span>
+                        </div>
+                        ` : `
+                        <div class="text-center lg:text-right">
+                            <button onclick="acknowledgeAnnouncement('${announcement.name}')" 
+                                    class="btn-primary text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center">
+                                <i class="fas fa-check mr-3"></i>
+                                Acknowledge
+                            </button>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                                Click to acknowledge this announcement
+                            </p>
+                        </div>
+                        `}
+                    </div>
+                </div>
+            </div>
+            `).join('')}
+        </div>
+    </div>
+    
+    <script>
+    async function acknowledgeAnnouncement(announcementName) {
+        const button = event.target;
+        const originalContent = button.innerHTML;
+    
+        // Show loading state
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i>Processing...';
+    
+        try {
+            const response = await fetch('/acknowledge-announcement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ announcement: announcementName })
+            });
+    
+            const result = await response.json();
+    
+            if (result.success) {
+                showToast('Announcement acknowledged successfully! 🎉', 'success');
+    
+                button.innerHTML = '<i class="fas fa-check-circle mr-3"></i>Acknowledged';
+                button.classList.remove('btn-primary');
+                button.classList.add('bg-green-500', 'cursor-not-allowed');
+    
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showToast('Failed to acknowledge announcement. Please try again.', 'error');
+                button.disabled = false;
+                button.innerHTML = originalContent;
+            }
+        } catch (error) {
+            showToast('An error occurred. Please try again.', 'error');
+            button.disabled = false;
+            button.innerHTML = originalContent;
+        }
+    }
+    </script>
+    ` }) %>
+    
