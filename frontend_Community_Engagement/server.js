@@ -96,6 +96,20 @@ app.post("/login", async (req, res) => {
       req.session.sid = sid
       req.session.username = username
 
+      // Fetch Employee record for this user (assume user_id matches username/email)
+      try {
+        const empData = await axios.get(`${FRAPPE_BASE_URL}/api/resource/Employee?filters=[[\"user_id\",\"=\",\"${username}\"]]&fields=[\"name\"]`, {
+          headers: { Cookie: sid }
+        });
+        if (empData.data.data && empData.data.data.length > 0) {
+          req.session.employee_id = empData.data.data[0].name;
+        } else {
+          req.session.employee_id = null;
+        }
+      } catch (empErr) {
+        req.session.employee_id = null;
+      }
+
       return res.redirect("/dashboard")
     } else {
       res.render("login", { error: "Invalid credentials" })
@@ -215,43 +229,50 @@ app.get("/surveys", requireAuth, async (req, res) => {
 // Survey Detail
 app.get("/survey/:name", requireAuth, async (req, res) => {
   try {
-    const surveyName = req.params.name
-
-    const questionsData = await makeAuthenticatedRequest(
-      `/api/method/get_survey_questions?survey_name=${surveyName}`,
+    const surveyName = req.params.name;
+    // Fetch the survey with its child table (questions)
+    const data = await makeAuthenticatedRequest(
+      `/api/resource/Community Survey/${surveyName}?fields=["name","title","questions"]&expand=questions`,
       { method: "GET" },
       req.session.sid,
-    )
-
+    );
+    const survey = data.data;
+    // questions is an array of child table rows
+    const questions = survey.questions || [];
     res.render("survey-detail", {
-      survey: { name: surveyName },
-      questions: questionsData.message || [],
+      survey,
+      questions,
       currentPage: "surveys",
-    })
+    });
   } catch (error) {
-    res.redirect("/surveys?error=Failed to load survey")
+    res.redirect("/surveys?error=Failed to load survey");
   }
-})
+});
 
 // Submit Survey Response
 app.post("/submit-survey", requireAuth, async (req, res) => {
   try {
-    const { survey_name, answers } = req.body
-
+    const { survey_name, answers } = req.body;
+    // Ensure answers is always an array
+    const answersArray = Array.isArray(answers) ? answers : Object.values(answers);
+    console.log("Submitting survey response:", { survey_name, answersArray });
     await makeAuthenticatedRequest(
-      "/api/method/submit_survey_response",
+      "/api/resource/Survey Response",
       {
         method: "POST",
-        data: { survey_name, answers },
+        data: {
+          survey: survey_name,
+          responses: answersArray, // Use 'responses' as the child table
+        },
       },
       req.session.sid,
-    )
-
-    res.redirect("/surveys?success=Survey submitted successfully")
+    );
+    res.redirect("/surveys?success=Survey submitted successfully");
   } catch (error) {
-    res.redirect(`/survey/${req.body.survey_name}?error=Failed to submit survey`)
+    console.error("Survey submission error:", error?.response?.data || error.message || error);
+    res.redirect(`/survey/${req.body.survey_name}?error=Failed to submit survey`);
   }
-})
+});
 
 // Gallery
 app.get("/gallery", requireAuth, async (req, res) => {
@@ -283,28 +304,24 @@ app.get("/gallery", requireAuth, async (req, res) => {
 // Album Detail
 app.get("/album/:name", requireAuth, async (req, res) => {
   try {
-    const albumName = req.params.name
-
+    const albumName = req.params.name;
+    // Fetch the album with its images child table
     const data = await makeAuthenticatedRequest(
-      `/api/resource/Gallery Image?filters=[["parent","=","${albumName}"]]&fields=["name","image","caption","creation"]`,
+      `/api/resource/Gallery Album/${albumName}?fields=["name","album_name","description","images"]&expand=images`,
       { method: "GET" },
       req.session.sid,
-    )
-
-    const images = data.data.map((image) => ({
-      ...image,
-      creation_formatted: moment(image.creation).format("MMM DD, YYYY"),
-    }))
-
+    );
+    const album = data.data;
+    const images = album.images || [];
     res.render("album-detail", {
-      album: { name: albumName },
+      album,
       images,
       currentPage: "gallery",
-    })
+    });
   } catch (error) {
-    res.redirect("/gallery?error=Failed to load album")
+    res.redirect("/gallery?error=Failed to load album");
   }
-})
+});
 
 // Events
 app.get("/events", requireAuth, async (req, res) => {
@@ -391,13 +408,12 @@ app.get("/feed", requireAuth, async (req, res) => {
 app.post("/post-comment", requireAuth, async (req, res) => {
   try {
     const { document_type, parent_document, comment_text } = req.body
-
     await makeAuthenticatedRequest(
       "/api/resource/Engagement Comment",
       {
         method: "POST",
         data: {
-          employee: req.session.username,
+          employee: req.session.employee_id,
           document_type,
           parent_document,
           comment_text,
@@ -405,7 +421,6 @@ app.post("/post-comment", requireAuth, async (req, res) => {
       },
       req.session.sid,
     )
-
     res.redirect("/feed?success=Comment posted successfully")
   } catch (error) {
     res.redirect("/feed?error=Failed to post comment")
@@ -432,6 +447,41 @@ app.get("/", (req, res) => {
     res.redirect("/login")
   }
 })
+
+// Get documents for a doctype (AJAX endpoint)
+app.get("/get-documents", requireAuth, async (req, res) => {
+  const { doctype } = req.query;
+  if (!doctype) return res.status(400).json({ error: "Missing doctype" });
+  try {
+    // Try to fetch name and title fields (fallback to name if title not present)
+    const data = await makeAuthenticatedRequest(
+      `/api/resource/${encodeURIComponent(doctype)}?fields=["name","title"]`,
+      { method: "GET" },
+      req.session.sid,
+    );
+    const docs = (data.data || []).map(doc => ({
+      name: doc.name,
+      title: doc.title || doc.name
+    }));
+    res.json({ documents: docs });
+  } catch (error) {
+    // Try fallback to just name if title field doesn't exist
+    try {
+      const data = await makeAuthenticatedRequest(
+        `/api/resource/${encodeURIComponent(doctype)}?fields=["name"]`,
+        { method: "GET" },
+        req.session.sid,
+      );
+      const docs = (data.data || []).map(doc => ({
+        name: doc.name,
+        title: doc.name
+      }));
+      res.json({ documents: docs });
+    } catch (err2) {
+      res.status(500).json({ error: "Failed to fetch documents" });
+    }
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Community Management App running on port ${PORT}`)

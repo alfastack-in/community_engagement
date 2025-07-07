@@ -1,53 +1,30 @@
 <%- include('layout', { body: `
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 flex items-center">
-                    <i class="fas fa-photo-video text-purple-600 mr-3"></i>
-                    Album Images
-                </h1>
-                <p class="mt-2 text-gray-600">Browse through the photos in this album</p>
-            </div>
-            <a href="/gallery" class="text-purple-600 hover:text-purple-700 flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Back to Gallery
-            </a>
-        </div>
+        <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+            <i class="fas fa-images text-purple-600 mr-3"></i>
+            ${album.album_name}
+        </h1>
+        <p class="mt-2 text-gray-600">${album.description || ''}</p>
+        <a href="/gallery" class="text-purple-600 hover:text-purple-700 flex items-center mt-4">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Gallery
+        </a>
     </div>
-
-    <!-- Images Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         ${images.length === 0 ? `
         <div class="col-span-full bg-white rounded-xl shadow-sm p-12 text-center">
             <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-image text-gray-400 text-2xl"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No images yet</h3>
-            <p class="text-gray-500">Images will appear here when they're added to this album.</p>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No images in this album</h3>
+            <p class="text-gray-500">Images will appear here when they're added.</p>
         </div>
-        ` : images.map(image => `
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
-            <div class="aspect-square bg-gray-200 flex items-center justify-center">
-                ${image.image ? `
-                <img src="${image.image}" alt="${image.caption || 'Album image'}" 
-                     class="w-full h-full object-cover cursor-pointer"
-                     onclick="openImageModal('${image.image}', '${image.caption || ''}')">
-                ` : `
-                <i class="fas fa-image text-gray-400 text-3xl"></i>
-                `}
-            </div>
-            
+        ` : images.map(img => `
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <img src="${img.image}" alt="${img.caption || ''}" class="w-full h-64 object-cover mb-4">
             <div class="p-4">
-                ${image.caption ? `
-                <p class="text-gray-700 text-sm mb-2 leading-relaxed">${image.caption}</p>
-                ` : ''}
-                
-                <div class="flex items-center text-xs text-gray-500">
-                    <i class="fas fa-calendar mr-1"></i>
-                    <span>${image.creation_formatted}</span>
-                </div>
+                <p class="text-gray-800 font-medium">${img.caption || ''}</p>
             </div>
         </div>
         `).join('')}
