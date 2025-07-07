@@ -32,6 +32,15 @@ app.set("views", path.join(__dirname, "views"))
 // Static files
 app.use(express.static(path.join(__dirname, "public")))
 
+// Middleware to make session info available to all views
+app.use((req, res, next) => {
+  res.locals.username = req.session.username || "";
+  res.locals.employee_name = req.session.employee_name || "";
+  res.locals.employee_email = req.session.employee_email || "";
+  res.locals.employee_id = req.session.employee_id || "";
+  next();
+});
+
 // Helper function to make authenticated requests to Frappe
 const makeAuthenticatedRequest = async (url, options = {}, cookies = "") => {
   try {
@@ -98,16 +107,23 @@ app.post("/login", async (req, res) => {
 
       // Fetch Employee record for this user (assume user_id matches username/email)
       try {
-        const empData = await axios.get(`${FRAPPE_BASE_URL}/api/resource/Employee?filters=[[\"user_id\",\"=\",\"${username}\"]]&fields=[\"name\"]`, {
+        const empData = await axios.get(`${FRAPPE_BASE_URL}/api/resource/Employee?filters=[[\"user_id\",\"=\",\"${username}\"]]&fields=[\"name\",\"employee_name\",\"user_id\",\"personal_email\"]`, {
           headers: { Cookie: sid }
         });
         if (empData.data.data && empData.data.data.length > 0) {
-          req.session.employee_id = empData.data.data[0].name;
+          const emp = empData.data.data[0];
+          req.session.employee_id = emp.name;
+          req.session.employee_name = emp.employee_name || "";
+          req.session.employee_email = emp.personal_email || "";
         } else {
           req.session.employee_id = null;
+          req.session.employee_name = "";
+          req.session.employee_email = "";
         }
       } catch (empErr) {
         req.session.employee_id = null;
+        req.session.employee_name = "";
+        req.session.employee_email = "";
       }
 
       return res.redirect("/dashboard")
