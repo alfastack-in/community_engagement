@@ -1,0 +1,103 @@
+<%- include('layout', { body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                    <i class="fas fa-photo-video text-purple-600 mr-3"></i>
+                    Album Images
+                </h1>
+                <p class="mt-2 text-gray-600">Browse through the photos in this album</p>
+            </div>
+            <a href="/gallery" class="text-purple-600 hover:text-purple-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Gallery
+            </a>
+        </div>
+    </div>
+
+    <!-- Images Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        ${images.length === 0 ? `
+        <div class="col-span-full bg-white rounded-xl shadow-sm p-12 text-center">
+            <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-image text-gray-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No images yet</h3>
+            <p class="text-gray-500">Images will appear here when they're added to this album.</p>
+        </div>
+        ` : images.map(image => `
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden card-hover">
+            <div class="aspect-square bg-gray-200 flex items-center justify-center">
+                ${image.image ? `
+                <img src="${image.image}" alt="${image.caption || 'Album image'}" 
+                     class="w-full h-full object-cover cursor-pointer"
+                     onclick="openImageModal('${image.image}', '${image.caption || ''}')">
+                ` : `
+                <i class="fas fa-image text-gray-400 text-3xl"></i>
+                `}
+            </div>
+            
+            <div class="p-4">
+                ${image.caption ? `
+                <p class="text-gray-700 text-sm mb-2 leading-relaxed">${image.caption}</p>
+                ` : ''}
+                
+                <div class="flex items-center text-xs text-gray-500">
+                    <i class="fas fa-calendar mr-1"></i>
+                    <span>${image.creation_formatted}</span>
+                </div>
+            </div>
+        </div>
+        `).join('')}
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+    <div class="relative max-w-4xl max-h-full">
+        <button onclick="closeImageModal()" 
+                class="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        <img id="modalImage" src="/placeholder.svg" alt="" class="max-w-full max-h-full object-contain">
+        <div id="modalCaption" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4 text-center"></div>
+    </div>
+</div>
+
+<script>
+function openImageModal(imageSrc, caption) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    modalImage.src = imageSrc;
+    modalImage.alt = caption;
+    modalCaption.textContent = caption;
+    
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
+
+// Close modal on background click
+document.getElementById('imageModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeImageModal();
+    }
+});
+</script>
+` }) %>

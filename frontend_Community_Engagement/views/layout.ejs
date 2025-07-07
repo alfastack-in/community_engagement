@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'slide-down': 'slideDown 0.3s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                        'bounce-gentle': 'bounceGentle 0.6s ease-out',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        bounceGentle: {
+                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                            '40%': { transform: 'translateY(-4px)' },
+                            '60%': { transform: 'translateY(-2px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+                            '100%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .dark .card-hover:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .dark .text-gradient {
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::before,
+        .nav-link.active::before {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-dark-900 min-h-screen transition-colors duration-300" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true', mobileMenuOpen: false }" x-init="$watch('darkMode', val => { localStorage.setItem('darkMode', val); val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark') })" :class="{ 'dark': darkMode }">
+    <% if (typeof currentPage !== 'undefined' && currentPage !== 'login') { %>
+        <!-- Navigation -->
+        <nav class="gradient-bg shadow-2xl sticky top-0 z-50 backdrop-blur-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo Section -->
+                    <div class="flex items-center space-x-4 flex-shrink-0 min-w-0">
+                        <div class="flex-shrink-0 floating-animation">
+                            <div class="bg-white/20 dark:bg-white/10 rounded-xl p-2 glass-effect">
+                                <i class="fas fa-users text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="min-w-0">
+                            <h1 class="text-white text-xl font-bold tracking-wide truncate max-w-[10rem] sm:max-w-xs">Community Engagement</h1>
+                            <p class="text-white/70 text-xs truncate max-w-[10rem] sm:max-w-xs">by Alfastack</p>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden lg:flex items-center space-x-1">
+                        <a href="/dashboard" class="nav-link <%= currentPage === 'dashboard' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-home mr-2"></i>Dashboard
+                        </a>
+                        <a href="/announcements" class="nav-link <%= currentPage === 'announcements' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-bullhorn mr-2"></i>Announcements
+                        </a>
+                        <a href="/surveys" class="nav-link <%= currentPage === 'surveys' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-poll mr-2"></i>Surveys
+                        </a>
+                        <a href="/gallery" class="nav-link <%= currentPage === 'gallery' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-images mr-2"></i>Gallery
+                        </a>
+                        <a href="/feed" class="nav-link <%= currentPage === 'feed' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-comments mr-2"></i>Feed
+                        </a>
+                        <a href="/events" class="nav-link <%= currentPage === 'events' ? 'active' : '' %> text-white/90 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-white/10">
+                            <i class="fas fa-calendar-alt mr-2"></i>Events
+                        </a>
+                    </div>
+
+                    <!-- User Actions -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Dark Mode Toggle -->
+                        <button @click="darkMode = !darkMode" class="text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-all duration-300">
+                            <i x-show="!darkMode" class="fas fa-moon"></i>
+                            <i x-show="darkMode" class="fas fa-sun"></i>
+                        </button>
+
+                        <!-- User Info -->
+                        <div class="hidden md:flex items-center space-x-3 bg-white/10 rounded-full px-4 py-2 glass-effect">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-sm"></i>
+                            </div>
+                            <span class="text-white/90 text-sm font-medium">
+                                <%= typeof username !== 'undefined' ? username : 'User' %>
+                            </span>
+                        </div>
+
+                        <!-- Logout Button -->
+                        <form action="/logout" method="POST" class="inline">
+                            <button type="submit" class="bg-red-500/20 hover:bg-red-500/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 glass-effect">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </form>
+
+                        <!-- Mobile Menu Button -->
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-all duration-300">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="lg:hidden" x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2">
+                <div class="px-4 pt-2 pb-4 space-y-2 bg-black/20 backdrop-blur-lg">
+                    <a href="/dashboard" class="<%= currentPage === 'dashboard' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-home mr-3"></i>Dashboard
+                    </a>
+                    <a href="/announcements" class="<%= currentPage === 'announcements' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-bullhorn mr-3"></i>Announcements
+                    </a>
+                    <a href="/surveys" class="<%= currentPage === 'surveys' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-poll mr-3"></i>Surveys
+                    </a>
+                    <a href="/gallery" class="<%= currentPage === 'gallery' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-images mr-3"></i>Gallery
+                    </a>
+                    <a href="/feed" class="<%= currentPage === 'feed' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-comments mr-3"></i>Feed
+                    </a>
+                    <a href="/events" class="<%= currentPage === 'events' ? 'bg-white/20' : '' %> text-white block px-4 py-3 rounded-lg text-base font-medium hover:bg-white/10 transition-all duration-300">
+                        <i class="fas fa-calendar-alt mr-3"></i>Events
+                    </a>
+                </div>
+            </div>
+        </nav>
+    <% } %>
+
+    <!-- Main Content -->
+    <main class="<%= typeof currentPage !== 'undefined' && currentPage !== 'login' ? 'py-8' : '' %> min-h-screen">
+        <%- body %>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="fixed top-20 right-4 z-50 hidden animate-slide-down">
+        <div class="bg-green-500 dark:bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl glass-effect">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-check-circle text-lg"></i>
+                <span id="toast-message" class="font-medium"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="bg-white dark:bg-dark-800 rounded-2xl p-8 shadow-2xl animate-scale-in">
+            <div class="flex flex-col items-center space-y-4">
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary-200 border-t-primary-600"></div>
+                <p class="text-gray-600 dark:text-gray-300 font-medium">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dark mode
+        if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Enhanced toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastDiv = toast.querySelector('div');
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            const colors = {
+                success: 'bg-green-500 dark:bg-green-600',
+                error: 'bg-red-500 dark:bg-red-600',
+                warning: 'bg-yellow-500 dark:bg-yellow-600',
+                info: 'bg-blue-500 dark:bg-blue-600'
+            };
+            
+            toastMessage.textContent = message;
+            toastDiv.className = `${colors[type]} text-white px-6 py-4 rounded-xl shadow-2xl glass-effect`;
+            toastDiv.querySelector('i').className = `fas ${icons[type]} text-lg`;
+            
+            toast.classList.remove('hidden');
+            toast.classList.add('animate-slide-down');
+            
+            setTimeout(() => {
+                toast.classList.add('animate-fade-out');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('animate-slide-down', 'animate-fade-out');
+                }, 300);
+            }, 4000);
+        }
+
+        // Loading overlay functions
+        function showLoading() {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        // Enhanced page transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add stagger animation to cards
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate-slide-up');
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Check for URL parameters and show toast
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success')) {
+            showToast(urlParams.get('success'), 'success');
+        }
+        if (urlParams.get('error')) {
+            showToast(urlParams.get('error'), 'error');
+        }
+        if (urlParams.get('warning')) {
+            showToast(urlParams.get('warning'), 'warning');
+        }
+        if (urlParams.get('info')) {
+            showToast(urlParams.get('info'), 'info');
+        }
+
+        // Enhanced form handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn && !submitBtn.disabled) {
+                    submitBtn.disabled = true;
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+                    
+                    // Re-enable after 5 seconds as fallback
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }, 5000);
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-slide-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

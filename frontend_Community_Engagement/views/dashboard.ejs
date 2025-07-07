@@ -1,0 +1,152 @@
+<%- include('layout', { body: `
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <!-- Hero Section -->
+    <div class="relative bg-white dark:bg-dark-800 rounded-3xl shadow-xl p-8 lg:p-12 overflow-hidden animate-slide-up">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-50 to-purple-50 dark:from-dark-700 dark:to-dark-600 opacity-50"></div>
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary-200/30 to-transparent rounded-full blur-3xl"></div>
+        
+        <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between">
+            <div class="flex-1 mb-6 lg:mb-0">
+                <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                    Welcome back, 
+                    <span class="text-gradient">${username}</span>! 👋
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Stay connected with your community and explore what's new today.
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <span class="inline-flex items-center px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium">
+                        <i class="fas fa-circle text-green-500 mr-2 text-xs animate-pulse"></i>
+                        Online
+                    </span>
+                    <span class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium">
+                        <i class="fas fa-clock mr-2"></i>
+                        Last login: Today
+                    </span>
+                </div>
+            </div>
+            
+            <div class="hidden lg:block">
+                <div class="relative">
+                    <div class="w-32 h-32 bg-gradient-to-br from-primary-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl floating-animation">
+                        <i class="fas fa-home text-white text-4xl"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-check text-white text-sm"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Navigation Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <a href="/announcements" class="group block bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll">
+            <div class="flex items-center mb-6">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-bullhorn text-white text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                        Announcements
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Stay updated</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                View company updates and important notices from leadership
+            </p>
+            <div class="flex items-center text-blue-600 dark:text-blue-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span>View all announcements</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </div>
+        </a>
+
+        <a href="/surveys" class="group block bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll">
+            <div class="flex items-center mb-6">
+                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-poll text-white text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">
+                        Surveys
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Share feedback</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Participate in feedback sessions and opinion polls
+            </p>
+            <div class="flex items-center text-green-600 dark:text-green-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span>Take surveys</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </div>
+        </a>
+
+        <a href="/gallery" class="group block bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll">
+            <div class="flex items-center mb-6">
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-images text-white text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                        Gallery
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Memories</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Browse event photos and memorable moments
+            </p>
+            <div class="flex items-center text-purple-600 dark:text-purple-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span>Explore gallery</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </div>
+        </a>
+
+        <a href="/feed" class="group block bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll">
+            <div class="flex items-center mb-6">
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-comments text-white text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                        Engagement Feed
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Join discussions</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Join conversations and share your thoughts
+            </p>
+            <div class="flex items-center text-orange-600 dark:text-orange-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span>Join discussion</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </div>
+        </a>
+
+        <a href="/events" class="group block bg-white dark:bg-dark-800 rounded-2xl shadow-lg p-8 card-hover border border-gray-100 dark:border-dark-700 animate-on-scroll">
+            <div class="flex items-center mb-6">
+                <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-4 group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-calendar-alt text-white text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-300">
+                        Events
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">Upcoming</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Discover and RSVP to upcoming company events
+            </p>
+            <div class="flex items-center text-red-600 dark:text-red-400 font-medium group-hover:translate-x-2 transition-transform duration-300">
+                <span>View events</span>
+                <i class="fas fa-arrow-right ml-2"></i>
+            </div>
+        </a>
+    </div>
+</div>
+` }) %>

@@ -242,12 +242,31 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
 fixtures = [
-    "Workflow",
+        "Workflow",
     "Notification",
     "Role",
     "User Permission",
     "Custom Field",
-    "Property Setter"
+    {"doctype": "Custom Field"},
+    {"doctype": "Property Setter"},
+    {"doctype": "DocType", "filters": [["name", "in", [
+        "Community Announcement",
+        "Community Event",
+        "Community Survey",
+        "Survey Question",
+        "Survey Answer",
+        "Survey Response",
+        "Gallery Album",
+        "Gallery Image",
+        "Engagement Comment",
+        "Event Attendee"
+    ]]]}
 ]
+override_http_headers = {
+  "Access-Control-Allow-Credentials": "true"
+}
+
+
 

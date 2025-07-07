@@ -1,0 +1,42 @@
+<%- include('layout', { body: `
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white dark:bg-dark-800 rounded-3xl shadow-xl p-8 border border-gray-100 dark:border-dark-700">
+        <a href="/announcements" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline mb-6">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Announcements
+        </a>
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center break-words truncate">
+                <i class="fas fa-bullhorn text-blue-500 dark:text-blue-400 mr-3"></i>
+                ${announcement.title}
+            </h1>
+            <div class="flex flex-wrap items-center gap-3 mb-2">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold ${announcement.audience === 'Organisation-wide' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' : 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'}">
+                    <i class="fas ${announcement.audience === 'Organisation-wide' ? 'fa-globe' : 'fa-building'} mr-2"></i>
+                    ${announcement.audience}
+                </span>
+                ${announcement.department ? `<span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 dark:bg-dark-700 text-gray-800 dark:text-gray-300"><i class="fas fa-users mr-2"></i>${announcement.department}</span>` : ''}
+            </div>
+            <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
+                <span class="flex items-center"><i class="fas fa-calendar mr-2"></i>Posted: ${moment(announcement.creation).format("MMM DD, YYYY")}</span>
+                ${announcement.expiry_date ? `<span class="flex items-center"><i class="fas fa-clock mr-2"></i>Expires: ${moment(announcement.expiry_date).format("MMM DD, YYYY")}</span>` : ''}
+            </div>
+        </div>
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Description</h2>
+            <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed break-words">${announcement.content}</p>
+        </div>
+        ${announcement.attachment ? `
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Attachment</h2>
+            ${/\.(jpg|jpeg|png|gif|webp)$/i.test(announcement.attachment) ? `
+                <img src="${announcement.attachment}" alt="Attachment" class="rounded-xl shadow-lg max-w-full h-auto mb-2 object-contain" style="display:block; margin:auto;" />
+            ` : `
+                <a href="${announcement.attachment}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-lg font-semibold hover:underline break-all">
+                    <i class="fas fa-paperclip mr-2"></i> Download Attachment
+                </a>
+            `}
+        </div>
+        ` : ''}
+    </div>
+</div>
+` }) %> 
